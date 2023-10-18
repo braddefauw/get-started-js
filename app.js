@@ -49,7 +49,22 @@ app.get('/recipes', async (req, res) => {
     const recipes = await Recipe.findAll();
     res.json(recipes);
 })
-  
+
+// update a recipe by ID
+app.put('/recipes/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, ingredients, instructions } = req.body;
+    const recipe = await Recipe.findByPk(id);
+    if(recipe){
+        recipe.name = name;
+        recipe.ingredients = ingredients;
+        recipe.instructions = instructions;
+        await recipe.save();
+        res.json(recipe);
+    }else{
+        res.status(404).json({error: 'Recipe not found'});
+    }
+})
 
 // start the server
 const PORT = process.env.PORT || 3000;
