@@ -30,6 +30,25 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
+
+//Routes for CRUD operations
+
+// create a new recipe
+app.post('/recipes', async (req, res) => {
+    try{
+        const {name, ingredients, instructions} = req.body;
+        const newRecipe = await Recipe.create({name, ingredients, instructions});
+        res.status(201).json(newRecipe);
+    }catch(error){
+        res.status(400).json({error: error.message})
+    }
+})
+
+// read all recipes
+app.get('/recipes', async (req, res) => {
+    const recipes = await Recipe.findAll();
+    res.json(recipes);
+})
   
 
 // start the server
