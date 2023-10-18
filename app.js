@@ -66,6 +66,18 @@ app.put('/recipes/:id', async (req, res) => {
     }
 })
 
+// delete a recipe by ID
+app.delete('/recipes/:id', async (req, res) => {
+    const { id } = req.params;
+    const recipe = await Recipe.findByPk(id);
+    if(recipe){
+        await recipe.destroy();
+        res.status(204).send();
+    }else{
+        res.status(404).json({error: 'Recipe not found'})
+    }
+})
+
 // start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
